@@ -64,6 +64,7 @@ A dynamic homepage featuring a Hero section, service highlights, and quick-actio
 - **Full CRUD:** Create, Read, Update, and Delete capabilities for both Items and Bookings.
 - **Security:** CSRF protection and `readonly` fields for sensitive data during updates.
 - **DRY Templates:** Implements a shared `base_delete.html` template for all confirmation pages.
+<img width="1386" height="891" alt="image" src="https://github.com/user-attachments/assets/a34e1e22-d11b-4a0e-bdf8-6c7a8ba335ba" />
 <img width="1313" height="895" alt="image" src="https://github.com/user-attachments/assets/0bf77b77-95cb-4c6e-bfae-276dbff29463" />
 <img width="1289" height="598" alt="image" src="https://github.com/user-attachments/assets/164f3391-cf1c-491d-9f04-7624b9049e6c" />
 
