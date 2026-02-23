@@ -16,6 +16,14 @@ class Reservation(TimestampedModel):
     end_date = models.DateField()
     items = models.ManyToManyField(Item, related_name='reservations')
 
+    @property
+    def total_price(self):
+        days = (self.end_date - self.start_date).days
+        if days == 0:
+            days = 1
+        total_items_price = sum(item.price_per_day for item in self.items.all())
+        return days * total_items_price
+
     def __str__(self):
         return f"Reservation by {self.customer_name} from {self.start_date} to {self.end_date}"
 

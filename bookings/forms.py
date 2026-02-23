@@ -17,6 +17,7 @@ class ReservationCreateForm(forms.ModelForm):
         widgets = {
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'end_date': forms.DateInput(attrs={'type': 'date'}),
+            'items': forms.CheckboxSelectMultiple(),
         }
         error_messages = {
             'customer_name': {
