@@ -1,10 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-5">My Bookings</h1>
+        <p class="text-muted">Manage your item reservations.</p>
+    </div>
+    <div class="col-auto d-flex align-items-center">
+        <a href="{% url 'bookings:create' %}" class="btn btn-success">+ New Reservation</a>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for reservation in reservations %}
+    <div class="col">
+        <div class="card shadow-sm h-100 border-primary">
+
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{{ reservation.customer_name }}</h5>
+                <small class="fw-bold">
+                    {{ reservation.start_date|date:"d M Y" }} &rarr; {{ reservation.end_date|date:"d M Y" }}
+                </small>
+            </div>
+
+            <div class="card-body">
+                <p class="text-muted mb-3"><strong>Email:</strong> {{ reservation.customer_email }}</p>
+
+                <p class="fw-bold mb-2 text-primary">Rented Items:</p>
+                <ul class="list-group list-group-flush mb-3">
+
+                    {% for item in reservation.items.all %}
+                        <li class="list-group-item px-0 py-1 d-flex justify-content-between align-items-center">
+                            <span>&bull; {{ item.title }}</span>
+                            <span class="badge bg-secondary rounded-pill">{{ item.price_per_day }} EUR/day</span>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item px-0 py-1 text-danger">No items selected.</li>
+                    {% endfor %}
+
+                </ul>
+
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                    <span class="fw-bold">Total Price:</span>
+                    <span class="fs-5 text-success fw-bold">{{ reservation.total_price }} EUR</span>
+                </div>
+
+            </div>
+
+            <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+                <a href="{% url 'bookings:details' reservation.pk %}" class="btn btn-outline-info btn-sm">View Details</a>
+                <div>
+                    <a href="{% url 'bookings:edit' reservation.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'bookings:delete' reservation.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <h3 class="text-muted">No reservations found.</h3>
+        <p>Ready to rent something? <a href="{% url 'catalog:list' %}">Check our catalog!</a></p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

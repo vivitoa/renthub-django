@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'shared/base_delete.html' %}
 
-</body>
-</html>
+{% block delete_title %}Cancel Reservation{% endblock %}
+{% block delete_question %}Are you sure you want to cancel this reservation?{% endblock %}
+
+{% block delete_details %}
+    <p class="card-text fs-5">
+        Customer: <strong>{{ object.customer_name }}</strong><br>
+        Period: <strong>{{ object.start_date|date:"d M Y" }} &rarr; {{ object.end_date|date:"d M Y" }}</strong>
+    </p>
+{% endblock %}
+
+{% block btn_delete_text %}Yes, Cancel It{% endblock %}
+{% block btn_cancel_text %}Keep It{% endblock %}
+{% block cancel_url %}{% url 'bookings:details' object.pk %}{% endblock %}
+

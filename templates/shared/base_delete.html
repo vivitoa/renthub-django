@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card border-danger shadow">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">{% block delete_title %}Confirm Deletion{% endblock %}</h4>
+            </div>
+            
+            <div class="card-body text-center py-5">
+                <h5 class="card-title text-danger mb-4">{% block delete_question %}Are you sure?{% endblock %}</h5>
+                
+                <div class="mb-4">
+                    {% block delete_details %}{% endblock %}
+                </div>
+                
+                <p class="text-muted mb-4 mt-3">This action is permanent and cannot be undone.</p>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-center gap-3">
+                        <button type="submit" class="btn btn-danger btn-lg px-4">{% block btn_delete_text %}Yes, Delete{% endblock %}</button>
+                        
+                        <a href="{% block cancel_url %}#{% endblock %}" class="btn btn-secondary btn-lg px-4">{% block btn_cancel_text %}Cancel{% endblock %}</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
