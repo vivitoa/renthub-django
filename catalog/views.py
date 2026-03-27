@@ -1,9 +1,11 @@
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
-from .models import Item
-from .forms import ItemForm
+from .models import Item, Review
+from .forms import ItemForm, ReviewCreateForm
+
+
 # Create your views here.
 
 
@@ -46,3 +48,16 @@ class ItemDeleteView(DeleteView):
     template_name = 'catalog/item_confirm_delete.html'
     success_url = reverse_lazy('catalog:list')
 
+class ReviewCreateView(CreateView):
+    model = Review
+    form_class = ReviewCreateForm
+    template_name = 'catalog/review_form.html'
+
+    def form_valid(self, form):
+        item = get_object_or_404(Item, pk=self.kwargs['pk'])
+        form.instance.item = item
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('catalog:details', kwargs={'pk': self.kwargs['pk']})

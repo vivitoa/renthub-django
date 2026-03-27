@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Item
+from .models import Item, Review
+
+
 # Register your models here.
 
 
@@ -16,4 +18,10 @@ class ItemAdmin(admin.ModelAdmin):
             'fields': ('price_per_day', 'image_url')
         }),
     )
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('item', 'reviewer_name', 'rating', 'created_at')
+    list_filter = ('rating', 'created_at')
+    search_fields = ('item__title', 'reviewer_name')
 

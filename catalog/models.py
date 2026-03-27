@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MinLengthValidator, MinValueValidator
+from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
 from common.models import TimestampedModel
 
 # Create your models here.
@@ -40,3 +40,25 @@ class Item(TimestampedModel):
     def __str__(self):
         return self.title
 
+class Review(TimestampedModel):
+
+    item = models.ForeignKey(
+        Item,
+        on_delete=models.CASCADE,
+        related_name='reviews'
+    )
+    reviewer_name = models.CharField(
+        max_length=100,
+        validators=[MinLengthValidator(2, "Name must be at least 2 characters.")]
+    )
+    rating = models.PositiveSmallIntegerField(
+        validators=[
+            MinValueValidator(1, "Minimum rating is 1"),
+            MaxValueValidator(5, "Maximum rating is 5")
+        ],
+        help_text="Rating from 1 to 5"
+    )
+    comment = models.TextField()
+
+    def __str__(self):
+        return f"{self.rating}/5 for {self.item.title}"

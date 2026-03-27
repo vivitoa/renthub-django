@@ -1,13 +1,14 @@
 from django.core.management.base import BaseCommand
-from catalog.models import Item
+from catalog.models import Item, Review
+import random
 
 
 class Command(BaseCommand):
-    help = 'Seeds the database with initial items for testing.'
+    help = 'Seeds the database with initial items and reviews for testing.'
 
     def handle(self, *args, **kwargs):
         self.stdout.write("Cleaning database...")
-        # Вече трием само Item, тъй като таблица Category не съществува
+        Review.objects.all().delete()
         Item.objects.all().delete()
 
         self.stdout.write("Starting database seeding...")
@@ -18,7 +19,7 @@ class Command(BaseCommand):
                 'description': 'Next-gen gaming console with one DualSense controller included. Perfect for a weekend gaming session.',
                 'price_per_day': 15.00,
                 'image_url': 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800',
-                'category': 'Electronics'  # Категорията вече е директен стринг
+                'category': 'Electronics'
             },
             {
                 'title': 'Bosch Professional Power Drill',
@@ -66,6 +67,25 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS(f"Successfully added item: {item.title}"))
             else:
                 self.stdout.write(self.style.WARNING(f"Item already exists: {item.title}"))
+
+        self.stdout.write("Generating sample reviews...")
+        reviewers = ['Alex', 'Maria', 'Ivan', 'Elena', 'Peter']
+        comments = [
+            'Absolutely fantastic! Worked flawlessly.',
+            'Great condition, very helpful.',
+            'Good price for the quality.',
+            'Highly recommend renting this!',
+            'Does the job perfectly.'
+        ]
+
+        for item in Item.objects.all():
+            for _ in range(2):
+                Review.objects.create(
+                    item=item,
+                    reviewer_name=random.choice(reviewers),
+                    rating=random.randint(4, 5),
+                    comment=random.choice(comments)
+                )
 
         self.stdout.write(self.style.SUCCESS("Database seeding completed successfully!"))
 

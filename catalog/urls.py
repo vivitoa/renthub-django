@@ -11,6 +11,7 @@ urlpatterns = [
         path('', views.ItemDetailView.as_view(), name='details'),
         path('edit/', views.ItemUpdateView.as_view(), name='edit'),
         path('delete/', views.ItemDeleteView.as_view(), name='delete'),
+        path('review/add/', views.ReviewCreateView.as_view(), name='add_review')
     ])),
 ]
 
