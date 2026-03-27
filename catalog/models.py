@@ -4,19 +4,13 @@ from common.models import TimestampedModel
 
 # Create your models here.
 
-class Category(TimestampedModel):
-    name = models.CharField(
-        max_length=100,
-        unique=True,
-        validators=[
-            MinLengthValidator(2, "Category name must be at least 2 characters long"),
-        ]
-    )
-
-    def __str__(self):
-        return self.name
-
 class Item(TimestampedModel):
+    class CategoryChoices(models.TextChoices):
+        ELECTRONICS = 'Electronics', 'Electronics'
+        TOOLS = 'Tools', 'Tools'
+        VEHICLES = 'Vehicles', 'Vehicles'
+        PARTY_EQUIPMENT = 'Party Equipment', 'Party Equipment'
+
     title = models.CharField(
         max_length=200,
         validators=[
@@ -37,7 +31,11 @@ class Item(TimestampedModel):
         null=True,
         help_text="Image URL"
     )
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='items')
+    category = models.CharField(
+        max_length=50,
+        choices=CategoryChoices.choices,
+        default=CategoryChoices.TOOLS
+    )
 
     def __str__(self):
         return self.title
