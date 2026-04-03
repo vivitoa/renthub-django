@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-je6sl#(i%5+yad-qjp^^^7mmn%^n2(6jm7%mgut5dlzecsqor!'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +37,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 PROJECT_APPS = [
+    'accounts',
     'bookings',
     'common',
     'catalog',
@@ -130,3 +131,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'accounts.AppUser'
+
+# Auth redirects
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'common:home'
+LOGOUT_REDIRECT_URL = 'common:home'
+
+# Email configuration
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+COMPANY_EMAIL = os.environ.get('COMPANY_EMAIL', 'noreply@renthub.com')

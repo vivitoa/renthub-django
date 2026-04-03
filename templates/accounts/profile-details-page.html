@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture }}" alt="Profile Picture"
+                             class="rounded-circle mb-3" width="120" height="120"
+                             style="object-fit: cover;">
+                    {% else %}
+                        <div class="rounded-circle bg-secondary d-inline-flex align-items-center
+                                    justify-content-center mb-3"
+                             style="width:120px;height:120px;">
+                            <span class="text-white fs-1">
+                                {{ profile.user.email|first|upper }}
+                            </span>
+                        </div>
+                    {% endif %}
+                    <h3>{{ profile.get_full_name }}</h3>
+                    <p class="text-muted">{{ profile.user.email }}</p>
+                </div>
+
+                {% if profile.bio %}
+                    <p class="text-center fst-italic">"{{ profile.bio }}"</p>
+                {% endif %}
+
+                {% if profile.phone_number %}
+                    <p class="text-center">
+                        <strong>Phone:</strong> {{ profile.phone_number }}
+                    </p>
+                {% endif %}
+
+                {% if is_owner %}
+                    <div class="d-flex justify-content-center gap-2 mt-4">
+                        <a href="{% url 'accounts:edit' profile.pk %}"
+                           class="btn btn-outline-primary">Edit Profile</a>
+                        <a href="{% url 'accounts:delete' profile.pk %}"
+                           class="btn btn-outline-danger">Delete Account</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -14,12 +14,33 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'catalog:list' %}">Catalog</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'catalog:create' %}">Add Item</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'bookings:list' %}">My Bookings</a>
-                </li>
+
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'catalog:create' %}">Add Item</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'bookings:list' %}">My Bookings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:details' user.pk %}">
+                            Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'accounts:logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link nav-link">Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:register' %}">Register</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
