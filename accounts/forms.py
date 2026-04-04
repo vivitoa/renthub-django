@@ -27,6 +27,13 @@ class AppUserChangeForm(UserChangeForm):
 
 
 class ProfileEditForm(forms.ModelForm):
+    email = forms.EmailField(
+        disabled=True,
+        required=False,
+        label="Email Address",
+        help_text="Email cannot be changed from this page.",
+    )
+
     class Meta:
         model = Profile
         exclude = ['user']
@@ -42,6 +49,10 @@ class ProfileEditForm(forms.ModelForm):
             'phone_number': forms.TextInput(attrs={'placeholder': '+359 88 888 8888'}),
             'profile_picture': forms.URLInput(attrs={'placeholder': 'https://...'}),
         }
-        help_texts = {
-            'phone_number': 'Used for rental coordination.',
-        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            self.fields['email'].initial = self.instance.user.email
+
+

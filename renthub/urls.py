@@ -26,6 +26,7 @@ urlpatterns = [
     path('catalog/', include('catalog.urls')),
     path('bookings/', include('bookings.urls')),
     path('accounts/', include('accounts.urls')),
+    path('wishlist/', include('wishlist.urls')),
 ]
 
 if settings.DEBUG:

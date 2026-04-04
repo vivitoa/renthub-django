@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load custom_tags %}
 
 {% block content %}
 <div class="container mt-2">
@@ -8,9 +9,12 @@
         <div class="row g-0">
             <div class="col-md-6">
                 {% if item.image_url %}
-                    <img src="{{ item.image_url }}" class="img-fluid rounded-start h-100" style="object-fit: cover; min-height: 400px;" alt="{{ item.title }}">
+                    <img src="{{ item.image_url }}" class="img-fluid rounded-start h-100"
+                         style="object-fit: cover; min-height: 400px;" alt="{{ item.title }}">
                 {% else %}
-                    <img src="https://via.placeholder.com/600x600?text=No+Image+Available" class="img-fluid rounded-start h-100" style="object-fit: cover; min-height: 400px;" alt="No image">
+                    <img src="https://via.placeholder.com/600x600?text=No+Image+Available"
+                         class="img-fluid rounded-start h-100"
+                         style="object-fit: cover; min-height: 400px;" alt="No image">
                 {% endif %}
             </div>
 
@@ -19,33 +23,66 @@
 
                     <div class="mb-3 d-flex justify-content-between align-items-center">
                         <span class="badge bg-secondary fs-6">{{ item.category }}</span>
-
                         <small class="text-muted">Listed on: {{ item.created_at|date:"F j, Y" }}</small>
                     </div>
 
                     <h2 class="card-title fw-bold mb-3">{{ item.title }}</h2>
-                    <h3 class="text-primary mb-4">{{ item.price_per_day }} EUR <span class="fs-6 text-muted">/ day</span></h3>
+                    <p class="text-muted mb-1">Owner: {{ item.owner.profile.get_full_name }}</p>
+                    <h3 class="text-primary mb-4">
+                        {{ item.price_per_day|currency }} <span class="fs-6 text-muted">/ day</span>
+                    </h3>
 
                     <h5 class="fw-bold border-bottom pb-2">Description</h5>
                     <p class="card-text flex-grow-1" style="white-space: pre-line;">{{ item.description }}</p>
 
-                    <div class="d-flex gap-2 mt-4 pt-3 border-top">
-                        <a href="{% url 'bookings:create' %}" class="btn btn-success flex-grow-1 btn-lg">Book This Item</a>
+                    <div class="d-flex gap-2 mt-4 pt-3 border-top flex-wrap">
 
-                        <a href="{% url 'catalog:edit' item.pk %}" class="btn btn-warning btn-lg">Edit</a>
-                        <a href="{% url 'catalog:delete' item.pk %}" class="btn btn-danger btn-lg">Delete</a>
+                        {% if user.is_authenticated %}
+                            {% if not is_owner %}
+                                <a href="{% url 'bookings:create' %}"
+                                   class="btn btn-success flex-grow-1 btn-lg">Book This Item</a>
+
+                                <form method="post" action="{% url 'wishlist:toggle' item.pk %}">
+                                    {% csrf_token %}
+                                    {% if in_wishlist %}
+                                        <button type="submit" class="btn btn-outline-danger btn-lg"
+                                                title="Remove from Wishlist">&#9829; Saved</button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-outline-secondary btn-lg"
+                                                title="Add to Wishlist">&#9825; Save</button>
+                                    {% endif %}
+                                </form>
+                            {% endif %}
+
+                            {% if is_owner %}
+                                <a href="{% url 'catalog:edit' item.pk %}"
+                                   class="btn btn-warning btn-lg">Edit</a>
+                                <a href="{% url 'catalog:delete' item.pk %}"
+                                   class="btn btn-danger btn-lg">Delete</a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'accounts:login' %}"
+                               class="btn btn-outline-primary flex-grow-1 btn-lg">
+                                Log in to Book or Save
+                            </a>
+                        {% endif %}
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <hr class="my-5">
 
 <div class="row mb-5">
     <div class="col-12 d-flex justify-content-between align-items-center mb-4">
         <h3 class="mb-0">Customer Reviews</h3>
-        <a href="{% url 'catalog:add_review' item.pk %}" class="btn btn-primary shadow-sm">Write a Review</a>
+        {% if user.is_authenticated and not is_owner %}
+            <a href="{% url 'catalog:add_review' item.pk %}"
+               class="btn btn-primary shadow-sm">Write a Review</a>
+        {% endif %}
     </div>
 
     <div class="col-12">
@@ -56,10 +93,23 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <h6 class="fw-bold mb-0">{{ review.reviewer_name }}</h6>
-                                <span class="badge bg-warning text-dark fs-6">{{ review.rating }} / 5 &#9733;</span>
+                                <span class="badge bg-warning text-dark fs-6">
+                                    {{ review.rating }} / 5 &#9733;
+                                </span>
                             </div>
-                            <small class="text-muted d-block mb-3">{{ review.created_at|date:"F d, Y" }}</small>
+                            <small class="text-muted d-block mb-3">
+                                {{ review.created_at|date:"F d, Y" }}
+                            </small>
                             <p class="card-text text-secondary">{{ review.comment }}</p>
+
+                            {% if user.is_authenticated and review.user == user %}
+                                <div class="d-flex gap-2 mt-3 pt-2 border-top">
+                                    <a href="{% url 'catalog:edit_review' review.pk %}"
+                                       class="btn btn-outline-warning btn-sm">Edit</a>
+                                    <a href="{% url 'catalog:delete_review' review.pk %}"
+                                       class="btn btn-outline-danger btn-sm">Delete</a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -71,8 +121,6 @@
                 </div>
             {% endfor %}
         </div>
-
     </div>
 </div>
 {% endblock %}
-

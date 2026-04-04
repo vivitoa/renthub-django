@@ -41,6 +41,7 @@ PROJECT_APPS = [
     'bookings',
     'common',
     'catalog',
+    'wishlist'
 ]
 INSTALLED_APPS = [
     'django.contrib.admin',

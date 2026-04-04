@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.core.validators import MinLengthValidator
 from common.models import TimestampedModel
@@ -5,6 +6,11 @@ from catalog.models import Item
 # Create your models here.
 
 class Reservation(TimestampedModel):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='reservations',
+    )
     customer_name = models.CharField(
         max_length=100,
         validators=[

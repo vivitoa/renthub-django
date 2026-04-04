@@ -1,3 +1,5 @@
+from tkinter import CASCADE
+from django.conf import settings
 from django.db import models
 from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
 from common.models import TimestampedModel
@@ -10,6 +12,12 @@ class Item(TimestampedModel):
         TOOLS = 'Tools', 'Tools'
         VEHICLES = 'Vehicles', 'Vehicles'
         PARTY_EQUIPMENT = 'Party Equipment', 'Party Equipment'
+    
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='items'
+    )
 
     title = models.CharField(
         max_length=200,
@@ -46,6 +54,13 @@ class Review(TimestampedModel):
         Item,
         on_delete=models.CASCADE,
         related_name='reviews'
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='reviews',
+        null=True,
+        blank=True
     )
     reviewer_name = models.CharField(
         max_length=100,

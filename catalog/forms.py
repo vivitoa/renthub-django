@@ -46,3 +46,21 @@ class ReviewCreateForm(forms.ModelForm):
             }),
         }
 
+class ReviewUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['rating', 'comment']
+        labels = {
+            'rating': 'Rating (1-5 Stars)',
+            'comment': 'Your Review',
+        }
+        widgets = {
+            'rating': forms.NumberInput(attrs={
+                'min': 1, 'max': 5
+            }),
+            'comment': forms.Textarea(attrs={
+                'rows': 4
+            }),
+        }
+
+

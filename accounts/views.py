@@ -30,6 +30,11 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_owner'] = self.object.user == self.request.user
+        context['total_reservations'] = self.object.user.reservations.count()
+        try:
+            context['wishlist_count'] = self.object.user.wishlist.items.count()
+        except Exception:
+            context['wishlist_count'] = 0
         return context
 
 

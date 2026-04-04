@@ -13,5 +13,9 @@ urlpatterns = [
         path('delete/', views.ItemDeleteView.as_view(), name='delete'),
         path('review/add/', views.ReviewCreateView.as_view(), name='add_review')
     ])),
+    path('review/<int:pk>/', include([
+        path('edit/', views.ReviewUpdateView.as_view(), name='edit_review'),
+        path('delete/', views.ReviewDeleteView.as_view(), name='delete_review'),
+    ])),
 ]
 
