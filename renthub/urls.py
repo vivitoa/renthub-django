@@ -27,6 +27,7 @@ urlpatterns = [
     path('bookings/', include('bookings.urls')),
     path('accounts/', include('accounts.urls')),
     path('wishlist/', include('wishlist.urls')),
+    path('api/', include('renthub.api_urls')),
 ]
 
 if settings.DEBUG:
