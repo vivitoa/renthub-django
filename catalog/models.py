@@ -39,6 +39,12 @@ class Item(TimestampedModel):
         null=True,
         help_text="Image URL"
     )
+    image = models.ImageField(
+        upload_to='items/',
+        blank=True,
+        null=True,
+        help_text="Upload an image file.",
+    )
     category = models.CharField(
         max_length=50,
         choices=CategoryChoices.choices,

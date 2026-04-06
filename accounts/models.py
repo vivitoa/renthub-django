@@ -56,10 +56,11 @@ class Profile(models.Model):
         help_text="Contact number for rental coordination.",
     )
 
-    profile_picture = models.URLField(
+    profile_picture = models.ImageField(
+        upload_to='profiles/',
         blank=True,
         null=True,
-        help_text="URL to your profile picture.",
+        help_text="Upload a profile picture.",
     )
 
     bio = models.TextField(

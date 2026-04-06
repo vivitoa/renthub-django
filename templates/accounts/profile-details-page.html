@@ -7,7 +7,7 @@
             <div class="card-body p-4">
                 <div class="text-center mb-4">
                     {% if profile.profile_picture %}
-                        <img src="{{ profile.profile_picture }}" alt="Profile Picture"
+                        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture"
                              class="rounded-circle mb-3" width="120" height="120"
                              style="object-fit: cover;">
                     {% else %}

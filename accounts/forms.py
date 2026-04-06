@@ -41,13 +41,12 @@ class ProfileEditForm(forms.ModelForm):
             'first_name': 'First Name',
             'last_name': 'Last Name',
             'phone_number': 'Phone Number',
-            'profile_picture': 'Profile Picture URL',
+            'profile_picture': 'Profile Picture',
             'bio': 'About Me',
         }
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Tell others about yourself...'}),
             'phone_number': forms.TextInput(attrs={'placeholder': '+359 88 888 8888'}),
-            'profile_picture': forms.URLInput(attrs={'placeholder': 'https://...'}),
         }
 
     def __init__(self, *args, **kwargs):

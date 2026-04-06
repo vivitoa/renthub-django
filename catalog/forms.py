@@ -5,12 +5,13 @@ from .models import Item, Review
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ['title', 'description', 'price_per_day', 'image_url', 'category']
+        fields = ['title', 'description', 'price_per_day', 'image_url', 'image', 'category']
         labels = {
             'title': 'Item Title',
             'description': 'Description',
             'price_per_day': 'Price per Day (EUR)',
             'image_url': 'Image URL',
+            'image': 'Upload Image (optional)',
             'category': 'Category',
         }
         widgets = {
@@ -18,6 +19,9 @@ class ItemForm(forms.ModelForm):
             'description': forms.Textarea(
                 attrs={'placeholder': 'Describe the item condition and features...', 'rows': 4}),
             'image_url': forms.URLInput(attrs={'placeholder': 'https://...'}),
+        }
+        help_texts = {
+            'image': 'If both URL and file are provided, the uploaded file takes priority.',
         }
 
 class ReviewCreateForm(forms.ModelForm):

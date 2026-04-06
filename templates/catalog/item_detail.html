@@ -8,7 +8,10 @@
     <div class="card shadow-sm border-0">
         <div class="row g-0">
             <div class="col-md-6">
-                {% if item.image_url %}
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="img-fluid rounded-start h-100"
+                         style="object-fit: cover; min-height: 400px;" alt="{{ item.title }}">
+                {% elif item.image_url %}
                     <img src="{{ item.image_url }}" class="img-fluid rounded-start h-100"
                          style="object-fit: cover; min-height: 400px;" alt="{{ item.title }}">
                 {% else %}
