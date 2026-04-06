@@ -4,6 +4,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Reservation
 from .forms import ReservationCreateForm, ReservationUpdateForm
+from .models import Reservation
+from .tasks import send_reservation_confirmation
 from common.mixins import CheckUserIsOwner
 # Create your views here.
 
@@ -29,7 +31,16 @@ class ReservationCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+
+        send_reservation_confirmation.delay(
+            customer_name=self.object.customer_name,
+            customer_email=self.object.customer_email,
+            start_date=str(self.object.start_date),
+            end_date=str(self.object.end_date),
+            total_price=str(self.object.total_price),
+        )
+        return response
 
 class ReservationUpdateView(LoginRequiredMixin, CheckUserIsOwner, UpdateView):
     model = Reservation
